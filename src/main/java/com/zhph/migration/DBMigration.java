@@ -85,9 +85,9 @@ public class DBMigration {
 
     /**
      * start table migrate
-     * first choose is page query,
-     * then mapping reader start read mapping file,
-     * in the end this start to migrate data
+     * first choose is page query or not,
+     * then mapping reader to start read mapping file,
+     * in the end this to start migrate data
      * @param isPageQuery
      * @throws IOException when the mapping file read has something wrong
      */

@@ -16,17 +16,17 @@ import java.util.Properties;
 public class MappingReader {
 
     /**
-     * mapping file path
+     * mappingFileName file path
      */
-    private static final String MAPPING_PATH = "com.zhph.migration.mapping";
+    private String mappingPackage;
 
     /**
-     * mapping file name
+     * mappingFileName file name
      */
-    private static final String MAPPING_FILE_NAME = "/table_mapping.properties";
+    private String mappingFileName = "/table_mapping.properties";
 
     /**
-     * mapping field handlers
+     * mappingFileName field handlers
      */
     private List<MigrationHandler> handlers;
 
@@ -43,12 +43,20 @@ public class MappingReader {
         this.handlers = handlers;
     }
 
+    public void setMappingPackage(String mappingPackage) {
+        this.mappingPackage = mappingPackage;
+    }
+
+    public void setMappingFileName(String mappingFileName) {
+        this.mappingFileName = mappingFileName;
+    }
+
     /**
-     * read properties to mapping TableMapping Object
+     * read properties to mappingFileName TableMapping Object
      * will map the source table name , and the target table name,
      * and any mapped column when you want
      * @return TableMapping
-     * @throws IOException when the mapping file read has something wrong.
+     * @throws IOException when the mappingFileName file read has something wrong.
      */
     public TableMapping read() throws IOException {
         Properties properties = LoadMappingProperties();
@@ -62,7 +70,7 @@ public class MappingReader {
             handler.handleProperties(properties,mapping);
         }
 
-        LOGGER.info("table mapping ended");
+        LOGGER.info("table mappingFileName ended");
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug(" : " + mapping);
         }
@@ -72,7 +80,7 @@ public class MappingReader {
     /**
      * load properties file to the Properties Object
      * @return Properties
-     * @throws IOException when the mapping file read has something wrong.
+     * @throws IOException when the mappingFileName file read has something wrong.
      */
     private Properties LoadMappingProperties() throws IOException {
         LOGGER.info("start load properties");
@@ -87,13 +95,14 @@ public class MappingReader {
     }
 
     /**
-     * transfer MAPPING_PATH to physical real file path
+     * transfer mappingPackage to physical real file path
      * @return physical real file path
      */
     private String resolveBasePackage() {
         final String systemPath = System.getProperty("user.dir");
-        final String basePath = ClassUtils.convertClassNameToResourcePath(SystemPropertyUtils.resolvePlaceholders(MAPPING_PATH));
+        final String basePath = ClassUtils.convertClassNameToResourcePath(SystemPropertyUtils.resolvePlaceholders(mappingPackage));
         final String srcPath = "/src/main/java/";
-        return String.format("%s%s%s%s",systemPath,srcPath,basePath,MAPPING_FILE_NAME);
+        final String fileName = mappingFileName.startsWith("/") ? mappingFileName : String.format("/%s",mappingFileName);
+        return String.format("%s%s%s%s",systemPath,srcPath,basePath, fileName);
     }
 }

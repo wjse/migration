@@ -45,6 +45,8 @@
        </bean>
 
        <bean id="mappingReader" class="com.zhph.migration.MappingReader">
+              <property name="mappingPackage" value="com.zhph.migration.mappingFileName"></property>
+              <property name="mappingFileName" value="table_mapping.properties"></property>
               <property name="handlers">
                      <list>
                             <bean class="com.zhph.migration.handler.TableNameHandler"></bean>
