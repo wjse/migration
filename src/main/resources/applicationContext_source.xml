@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+                           http://www.springframework.org/schema/tx
+                           http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+                           http://www.springframework.org/schema/aop
+                           http://www.springframework.org/schema/aop/spring-aop-3.1.xsd">
+
+       <!-- dataSource -->
+       <bean id="sourceDataSource" class="org.apache.commons.dbcp.BasicDataSource">
+              <property name="username" value="${source.connection.username}"></property>
+              <property name="password" value="${source.connection.password}"></property>
+              <property name="url" value="${source.connection.url}"></property>
+              <property name="driverClassName" value="${source.connection.driverClassName}"></property>
+              <property name="initialSize" value="${connection.initialSize}"></property>
+              <property name="maxActive" value="${connection.maxActive}"></property>
+              <property name="maxIdle" value="${connection.maxIdle}"></property>
+              <property name="minIdle" value="${connection.minIdle}"></property>
+              <property name="maxWait" value="${connection.maxWait}"></property>
+              <property name="removeAbandoned" value="${connection.removeAbandoned}"></property>
+              <property name="removeAbandonedTimeout" value="${connection.removeAbandonedTimeout}"></property>
+              <property name="logAbandoned" value="${connection.logAbandoned}"></property>
+       </bean>
+
+       <bean id="sourceSqlMapClient" class="org.springframework.orm.ibatis.SqlMapClientFactoryBean">
+              <property name="dataSource" ref="sourceDataSource"></property>
+              <property name="lobHandler" ref="defaultLobHandler"/>
+              <property name="configLocation">
+                     <value>classpath:mapping/SqlMapConfig.xml</value>
+              </property>
+              <property name="mappingLocations">
+                     <list>
+                            <value>classpath*:/mapping/source/*-sql.xml</value>
+                     </list>
+              </property>
+       </bean>
+       <bean class="org.oproject.framework.orm.ibatis.CustomizedSQLExecutor" init-method="init" lazy-init="false">
+              <property name="nativeQuery" ref="nativeQueryForOracle" />
+              <property name="sqlMapClient" ref="sourceSqlMapClient"/>
+       </bean>
+       <bean id="sqlMapClientTemplateSource" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
+              <property name="sqlMapClient" ref="sourceSqlMapClient"/>
+       </bean>
+
+       <!-- 事务 -->
+       <bean id="sourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+              <property name="dataSource" ref="sourceDataSource"/>
+       </bean>
+       <aop:config>
+              <aop:pointcut id="sourceDefaultTransactionalPointcut" expression="execution(* com.zhph.migration.*.service.impl.*(..))" />
+              <aop:advisor order="1" pointcut-ref="sourceDefaultTransactionalPointcut" advice-ref="txAdviceForTransactionManager0"/>
+       </aop:config>
+       <tx:advice id="txAdviceForTransactionManager0" transaction-manager="sourceTransactionManager">
+              <tx:attributes>
+                     <tx:method name="*"/>
+              </tx:attributes>
+       </tx:advice>
+</beans>
