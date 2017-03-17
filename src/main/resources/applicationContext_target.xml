@@ -50,7 +50,7 @@
               <property name="dataSource" ref="targetDataSource"/>
        </bean>
        <aop:config>
-              <aop:pointcut id="targetDefaultTransactionalPointcut" expression="execution(* com.zhph.migration.*.service.impl.*(..))" />
+              <aop:pointcut id="targetDefaultTransactionalPointcut" expression="execution(* com.zhph.migration.DBMigration.startMigrate(..))" />
               <aop:advisor order="1" pointcut-ref="targetDefaultTransactionalPointcut" advice-ref="txAdviceForTransactionManager1"/>
        </aop:config>
        <tx:advice id="txAdviceForTransactionManager1" transaction-manager="targetTransactionManager">

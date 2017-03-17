@@ -44,18 +44,4 @@
        <bean id="sqlMapClientTemplateSource" class="org.springframework.orm.ibatis.SqlMapClientTemplate">
               <property name="sqlMapClient" ref="sourceSqlMapClient"/>
        </bean>
-
-       <!-- 事务 -->
-       <bean id="sourceTransactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
-              <property name="dataSource" ref="sourceDataSource"/>
-       </bean>
-       <aop:config>
-              <aop:pointcut id="sourceDefaultTransactionalPointcut" expression="execution(* com.zhph.migration.*.service.impl.*(..))" />
-              <aop:advisor order="1" pointcut-ref="sourceDefaultTransactionalPointcut" advice-ref="txAdviceForTransactionManager0"/>
-       </aop:config>
-       <tx:advice id="txAdviceForTransactionManager0" transaction-manager="sourceTransactionManager">
-              <tx:attributes>
-                     <tx:method name="*"/>
-              </tx:attributes>
-       </tx:advice>
 </beans>
