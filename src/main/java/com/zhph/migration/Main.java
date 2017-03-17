@@ -2,6 +2,7 @@ package com.zhph.migration;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.BeanDefinitionStoreException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.util.Assert;
@@ -14,10 +15,14 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class);
 
     public static void main(String[] args) {
-        ApplicationContext context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
-        Assert.notNull(context);
-
         LOGGER.info("start migrate...");
+        ApplicationContext context = null;
+        try {
+            context = new ClassPathXmlApplicationContext("classpath:applicationContext.xml");
+            Assert.notNull(context);
+        }catch (BeanDefinitionStoreException e){
+            ThereIsNoDataSource(e);
+        }
 
         DBMigration dbMigration = (DBMigration) context.getBean("DBMigration");
         Assert.notNull(dbMigration);
@@ -52,6 +57,15 @@ public class Main {
         } catch (Exception e) {
             LOGGER.error("migrate fail.");
             LOGGER.error(e);
+        }
+    }
+
+    private static void ThereIsNoDataSource(BeanDefinitionStoreException e){
+        String beanName = e.getBeanName();
+        if(beanName.endsWith("DataSource")){
+            LOGGER.warn("There is no configuration of source table data source or target table data source.");
+            LOGGER.warn("Please check \"src/main/resources/jdbc.properties\" first.Program will shutdown");
+            System.exit(0);
         }
     }
 }
