@@ -1,5 +1,7 @@
 package com.zhph.migration.po;
 
+import org.apache.commons.lang.StringUtils;
+
 import java.util.Map;
 
 /**
@@ -45,6 +47,12 @@ public class TableMapping {
 
     public void setColumnsMapping(Map<String, Object> columnsMapping) {
         this.columnsMapping = columnsMapping;
+    }
+
+    public boolean validate(){
+        return StringUtils.isNotEmpty(this.sourceTableName)
+                && StringUtils.isNotEmpty(this.targetTableName)
+                && (this.columnsMapping != null && !this.columnsMapping.isEmpty());
     }
 
     @Override

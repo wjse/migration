@@ -14,24 +14,24 @@ import java.sql.SQLException;
 /**
  * Created by Administrator on 2017/3/14.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class DBMigrationTest {
-
-    @Autowired
-    DBMigration  dbMigration;
-
-    @Autowired@Qualifier("TargetMetaDataDAO")
-    TargetMetaDataDAO targetMetaDataDAO;
-
-
-    @Test
-    public void test_migrate() throws IOException, SQLException {
-        dbMigration.startMigrate(true);
-    }
-
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
+//public class DBMigrationTest {
+//
+//    @Autowired
+//    DBMigration  dbMigration;
+//
+//    @Autowired@Qualifier("TargetMetaDataDAO")
+//    TargetMetaDataDAO targetMetaDataDAO;
+//
+//
 //    @Test
-    public void test_meta_data() throws SQLException {
-//        targetMetaDataDAO.getAllTargetTableColumns();
-    }
-}
+//    public void test_migrate() throws IOException, SQLException {
+//        dbMigration.startMigrate(true);
+//    }
+//
+////    @Test
+//    public void test_meta_data() throws SQLException {
+////        targetMetaDataDAO.getAllTargetTableColumns();
+//    }
+//}

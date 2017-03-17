@@ -70,7 +70,12 @@ public class MappingReader {
             handler.handleProperties(properties,mapping);
         }
 
-        LOGGER.info("table mappingFileName ended");
+        if(!mapping.validate()){
+            LOGGER.warn("There is no mapping information in the mapping file.Program will shutdown");
+            System.exit(0);
+        }
+
+        LOGGER.info("load properties ended");
         if(LOGGER.isDebugEnabled()){
             LOGGER.debug(" : " + mapping);
         }

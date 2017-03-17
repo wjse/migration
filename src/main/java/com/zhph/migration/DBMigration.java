@@ -13,12 +13,15 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Table data migration
  */
-@Component
+@Component("DBMigration")
 public class DBMigration {
 
     private static final Logger LOGGER = Logger.getLogger(DBMigration.class);

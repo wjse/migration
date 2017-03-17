@@ -11,14 +11,14 @@ import java.io.IOException;
 /**
  * Created by Administrator on 2017/3/14.
  */
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
-public class MappingReaderTest {
-    @Autowired
-    MappingReader reader;
-
-    @Test
-    public void test_read() throws IOException {
-        reader.read();
-    }
-}
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = { "classpath:applicationContext.xml" })
+//public class MappingReaderTest {
+//    @Autowired
+//    MappingReader reader;
+//
+//    @Test
+//    public void test_read() throws IOException {
+//        reader.read();
+//    }
+//}
